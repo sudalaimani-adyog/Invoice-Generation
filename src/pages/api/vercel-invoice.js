@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     console.log("Environment:", process.env.NODE_ENV || 'development');
     console.log("Platform:", process.platform);
     console.log("Vercel:", process.env.VERCEL ? 'true' : 'false');
-    
+
     // Sample invoice data
     const invoiceData = {
       invoiceNumber: "TEST/2024/001",
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
           quantity: 1000,
         },
         {
-          serialNumber: "2", 
+          serialNumber: "2",
           particulars: "Test Membership Fee",
           serviceCode: "-",
           amount: 2000,
@@ -68,26 +68,79 @@ export default async function handler(req, res) {
 
     // For now, always use canvas since @vercel/og has deployment complexity
     // In production Vercel, use the dedicated /api/vercel-invoice endpoint
-      console.log("Using canvas for invoice generation");
-      
-      // Use canvas for local development
+    console.log("Using canvas for invoice generation");
 
-      
-      const invoiceBuffer = await generateInvoice(
-        invoiceData
-      );
-      
-      res.setHeader('Content-Type', 'image/jpeg');
-      res.setHeader('Content-Length', invoiceBuffer.length);
-      res.setHeader('Content-Disposition', 'inline; filename="invoice.jpeg"');
-      
-      return res.status(200).send(invoiceBuffer);
+    // Use canvas for local development
+
+
+    const invoiceBuffer = await generateInvoice({
+      invoiceNumber: "INV-2025-001",
+      invoiceDate: "2025-09-03",
+      referenceNumber: "REF-12345",
+      otherReference: "PO-56789",
+      clientMobile: "9876543210",
+      clientEmail: "client@example.com",
+      clientAddress: {
+      line1: "John Doe",
+      line2: "123, Main Street, Business Park",
+      state: "Tamil Nadu",
+      code: "33",
+    },
+      items: [
+      {
+        serialNumber: 1,
+        particulars: "Website Development Services",
+        serviceCode: "998313",
+        quantity: 1,
+        rate: 50000,
+        amount: 50000,
+      },
+      {
+        serialNumber: 2,
+        particulars: "Mobile App Development",
+        serviceCode: "998314",
+        quantity: 1,
+        rate: 30000,
+        amount: 30000,
+      },
+    ],
+      igstRow: {
+      serialNumber: "",
+      particulars: "IGST",
+      serviceCode: "-",
+      amount: 14400,
+    },
+      totalAmount: 94400,
+      amountInWords: "INR NINETY FOUR THOUSAND FOUR HUNDRED ONLY",
+      gst: {
+      igstDetails: [
+        {
+          HSNserial: "999599",
+          taxableValue: 80000,
+          igst: {
+            rate: "18%",
+            amount: 14400,
+          },
+          totalTax: 14400,
+        },
+      ],
+    },
+      totalTaxAmount: 14400,
+      taxAmountInWords: "INR FOURTEEN THOUSAND FOUR HUNDRED ONLY"}
+    );
+    console.log("lsndkjashdkjashdkjhasdkjhasdjkhasjkdhjkasdhjkashdkjads");
+
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Length', invoiceBuffer.length);
+    res.setHeader('Content-Disposition', 'inline; filename="invoice.jpeg"');
+
+    return res.status(200).send(invoiceBuffer);
 
   } catch (error) {
     console.error("Smart invoice generation failed:", error);
-    
-    res.status(500).json({ 
-      success: false, 
+
+    res.status(500).json({
+      success: false,
       error: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       environment: process.env.NODE_ENV || 'development',
