@@ -1,16 +1,15 @@
 import { generateInvoiceVercel } from '../../utils/invoicehelper-vercel';
 
-export default async function handler(req, res) {
+export default async function handler(req) {
   // Allow GET and POST methods
   if (req.method !== 'GET' && req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return new Response(JSON.stringify({ message: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
-    console.log("Starting Vercel OG invoice generation");
-    console.log("Environment:", process.env.NODE_ENV || 'development');
-    console.log("Platform:", process.platform);
-    console.log("Node version:", process.version);
     
     // Test invoice generation with sample data
     const imageResponse = await generateInvoiceVercel(
@@ -63,8 +62,6 @@ export default async function handler(req, res) {
       "INR FIVE HUNDRED AND FORTY ONLY"
     );
 
-    console.log("Vercel OG invoice generation successful");
-    
     // Return the ImageResponse directly
     return imageResponse;
 
@@ -72,13 +69,13 @@ export default async function handler(req, res) {
     console.error("Vercel OG invoice generation failed:", error);
     
     // Return error as JSON if generation fails
-    res.status(500).json({ 
+    return new Response(JSON.stringify({
       success: false, 
       error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      environment: process.env.NODE_ENV || 'development',
-      platform: process.platform,
       library: 'vercel/og'
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }

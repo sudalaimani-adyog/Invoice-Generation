@@ -61,36 +61,8 @@ export default async function handler(req, res) {
       taxAmountInWords: "INR FIVE HUNDRED AND FORTY ONLY"
     };
 
-    // Detect environment and use appropriate generation method
-    const isVercel = process.env.VERCEL || process.env.VERCEL_ENV;
-    const isEdgeRuntime = process.env.NEXT_RUNTIME === 'edge';
-
-    if (isVercel || isEdgeRuntime) {
-      console.log("Using Vercel OG for invoice generation");
-      
-      // Use Vercel OG for serverless environment
-      const { generateInvoiceVercel } = await import('../../utils/invoicehelper-vercel');
-      
-      const imageResponse = await generateInvoiceVercel(
-        invoiceData.invoiceNumber,
-        invoiceData.date,
-        invoiceData.referenceNumber,
-        invoiceData.otherReference,
-        invoiceData.clientMobile,
-        invoiceData.clientEmail,
-        invoiceData.clientAddress,
-        invoiceData.items,
-        invoiceData.igstRow,
-        invoiceData.totalAmount,
-        invoiceData.amountInWords,
-        invoiceData.igstDetails,
-        invoiceData.totalTaxAmount,
-        invoiceData.taxAmountInWords
-      );
-      
-      return imageResponse;
-      
-    } else {
+    // For now, always use canvas since @vercel/og has deployment complexity
+    // In production Vercel, use the dedicated /api/vercel-invoice endpoint
       console.log("Using canvas for invoice generation");
       
       // Use canvas for local development
@@ -118,7 +90,6 @@ export default async function handler(req, res) {
       res.setHeader('Content-Disposition', 'inline; filename="invoice.jpeg"');
       
       return res.status(200).send(invoiceBuffer);
-    }
 
   } catch (error) {
     console.error("Smart invoice generation failed:", error);

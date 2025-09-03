@@ -87,7 +87,7 @@ export default function Home() {
         </button>
         
         <button 
-          onClick={() => testInvoice('/api/test-invoice-vercel')}
+          onClick={() => testInvoice('/api/vercel-invoice')}
           disabled={loading}
           style={{
             padding: '10px 20px',
@@ -114,7 +114,7 @@ export default function Home() {
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >
-          {loading ? 'Testing...' : 'Test Smart Invoice'}
+          {loading ? 'Testing...' : 'Test Canvas Invoice'}
         </button>
       </div>
       
@@ -135,15 +135,16 @@ export default function Home() {
         <ul>
           <li><a href="/api/test-canvas" target="_blank">/api/test-canvas</a> - Basic canvas test</li>
           <li><a href="/api/test-invoice" target="_blank">/api/test-invoice</a> - Canvas-based invoice (local)</li>
-          <li><a href="/api/test-invoice-vercel" target="_blank">/api/test-invoice-vercel</a> - Vercel OG invoice (serverless)</li>
-          <li><a href="/api/invoice" target="_blank">/api/invoice</a> - Smart invoice (auto-detects environment)</li>
+          <li><a href="/api/test-invoice-vercel" target="_blank">/api/test-invoice-vercel</a> - Vercel OG invoice (edge runtime)</li>
+          <li><a href="/api/vercel-invoice" target="_blank">/api/vercel-invoice</a> - Simple Vercel OG invoice (production ready)</li>
+          <li><a href="/api/invoice" target="_blank">/api/invoice</a> - Canvas-based invoice</li>
         </ul>
         
         <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e8f4f8', borderRadius: '5px' }}>
-          <h4>Environment Detection:</h4>
-          <p><strong>Local:</strong> Uses canvas for text rendering</p>
-          <p><strong>Vercel:</strong> Uses @vercel/og for reliable text rendering in serverless</p>
-          <p><strong>Smart endpoint:</strong> Automatically detects environment and uses appropriate method</p>
+          <h4>Deployment Solutions:</h4>
+          <p><strong>Canvas endpoints:</strong> Work locally but may have text rendering issues in Vercel serverless</p>
+          <p><strong>Vercel OG endpoints:</strong> Guaranteed to work in Vercel production with proper text rendering</p>
+          <p><strong>Recommended for production:</strong> Use <code>/api/vercel-invoice</code> for Vercel deployments</p>
         </div>
       </div>
     </div>
