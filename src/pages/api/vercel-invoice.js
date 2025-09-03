@@ -1,3 +1,5 @@
+import generateInvoice from "../../utils/invoicehelper";
+
 export default async function handler(req, res) {
   // Allow GET and POST methods
   if (req.method !== 'GET' && req.method !== 'POST') {
@@ -30,12 +32,15 @@ export default async function handler(req, res) {
           particulars: "Test Entrance Fee",
           serviceCode: "-",
           amount: 1000,
+          quantity: 1000,
         },
         {
           serialNumber: "2", 
           particulars: "Test Membership Fee",
           serviceCode: "-",
           amount: 2000,
+          quantity: 1000,
+
         }
       ],
       igstRow: {
@@ -66,23 +71,10 @@ export default async function handler(req, res) {
       console.log("Using canvas for invoice generation");
       
       // Use canvas for local development
-      const generateInvoice = (await import('../../utils/invoicehelper')).default;
+
       
       const invoiceBuffer = await generateInvoice(
-        invoiceData.invoiceNumber,
-        invoiceData.date,
-        invoiceData.referenceNumber,
-        invoiceData.otherReference,
-        invoiceData.clientMobile,
-        invoiceData.clientEmail,
-        invoiceData.clientAddress,
-        invoiceData.items,
-        invoiceData.igstRow,
-        invoiceData.totalAmount,
-        invoiceData.amountInWords,
-        invoiceData.igstDetails,
-        invoiceData.totalTaxAmount,
-        invoiceData.taxAmountInWords
+        invoiceData
       );
       
       res.setHeader('Content-Type', 'image/jpeg');

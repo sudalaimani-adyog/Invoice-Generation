@@ -15,7 +15,7 @@ GlobalFonts.registerFromPath(
   "Trebuchet MS"
 );
 
-export async function generateInvoice(invoiceData) {
+ async function generateInvoice(invoiceData) {
   const width = 800;
   const height = 1000;
   const canvas = createCanvas(width, height);
@@ -92,4 +92,6 @@ export async function generateInvoice(invoiceData) {
   return canvas.toBuffer("image/png");
 }
 
+
+export default generateInvoice;
 
