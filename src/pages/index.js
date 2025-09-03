@@ -26,17 +26,17 @@ export default function Home() {
     setLoading(false);
   };
 
-  const testInvoice = async () => {
+  const testInvoice = async (endpoint = '/api/test-invoice') => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/test-invoice');
+      const response = await fetch(endpoint);
       if (response.ok) {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'test-invoice.jpg';
+        link.download = `invoice-${endpoint.split('/').pop()}.jpg`;
         link.click();
       } else {
         const errorData = await response.json();
@@ -71,10 +71,11 @@ export default function Home() {
         </button>
         
         <button 
-          onClick={testInvoice}
+          onClick={() => testInvoice('/api/test-invoice')}
           disabled={loading}
           style={{
             padding: '10px 20px',
+            marginRight: '10px',
             backgroundColor: '#28a745',
             color: 'white',
             border: 'none',
@@ -82,7 +83,38 @@ export default function Home() {
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >
-          {loading ? 'Testing...' : 'Test Invoice Generation'}
+          {loading ? 'Testing...' : 'Test Canvas Invoice'}
+        </button>
+        
+        <button 
+          onClick={() => testInvoice('/api/test-invoice-vercel')}
+          disabled={loading}
+          style={{
+            padding: '10px 20px',
+            marginRight: '10px',
+            backgroundColor: '#6f42c1',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {loading ? 'Testing...' : 'Test Vercel Invoice'}
+        </button>
+        
+        <button 
+          onClick={() => testInvoice('/api/invoice')}
+          disabled={loading}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#fd7e14',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {loading ? 'Testing...' : 'Test Smart Invoice'}
         </button>
       </div>
       
@@ -102,8 +134,17 @@ export default function Home() {
         <h3>Test Endpoints:</h3>
         <ul>
           <li><a href="/api/test-canvas" target="_blank">/api/test-canvas</a> - Basic canvas test</li>
-          <li><a href="/api/test-invoice" target="_blank">/api/test-invoice</a> - Full invoice generation test</li>
+          <li><a href="/api/test-invoice" target="_blank">/api/test-invoice</a> - Canvas-based invoice (local)</li>
+          <li><a href="/api/test-invoice-vercel" target="_blank">/api/test-invoice-vercel</a> - Vercel OG invoice (serverless)</li>
+          <li><a href="/api/invoice" target="_blank">/api/invoice</a> - Smart invoice (auto-detects environment)</li>
         </ul>
+        
+        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e8f4f8', borderRadius: '5px' }}>
+          <h4>Environment Detection:</h4>
+          <p><strong>Local:</strong> Uses canvas for text rendering</p>
+          <p><strong>Vercel:</strong> Uses @vercel/og for reliable text rendering in serverless</p>
+          <p><strong>Smart endpoint:</strong> Automatically detects environment and uses appropriate method</p>
+        </div>
       </div>
     </div>
   );

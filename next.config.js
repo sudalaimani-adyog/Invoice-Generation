@@ -4,9 +4,6 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     serverComponentsExternalPackages: ['@napi-rs/canvas']
-  },
-  api: {
-    responseLimit: '10mb',
   }
 }
 
