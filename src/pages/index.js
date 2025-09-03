@@ -4,29 +4,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const testCanvas = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await fetch('/api/test-canvas');
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'test-canvas.jpg';
-        link.click();
-      } else {
-        const errorData = await response.json();
-        setError(`Canvas test failed: ${errorData.error}`);
-      }
-    } catch (err) {
-      setError(`Network error: ${err.message}`);
-    }
-    setLoading(false);
-  };
 
-  const testInvoice = async (endpoint = '/api/test-invoice') => {
+  const testInvoice = async (endpoint = '/api/invoice') => {
     setLoading(true);
     setError('');
     try {
@@ -55,66 +34,36 @@ export default function Home() {
       
       <div style={{ marginBottom: '20px' }}>
         <button 
-          onClick={testCanvas}
+          onClick={() => testInvoice('/api/invoice')}
           disabled={loading}
           style={{
-            padding: '10px 20px',
-            marginRight: '10px',
-            backgroundColor: '#0070f3',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Testing...' : 'Test Canvas'}
-        </button>
-        
-        <button 
-          onClick={() => testInvoice('/api/test-invoice')}
-          disabled={loading}
-          style={{
-            padding: '10px 20px',
-            marginRight: '10px',
+            padding: '15px 30px',
+            marginRight: '15px',
             backgroundColor: '#28a745',
             color: 'white',
             border: 'none',
-            borderRadius: '5px',
+            borderRadius: '8px',
+            fontSize: '16px',
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >
-          {loading ? 'Testing...' : 'Test Canvas Invoice'}
+          {loading ? 'Generating...' : 'Generate Canvas Invoice (Local)'}
         </button>
         
         <button 
           onClick={() => testInvoice('/api/vercel-invoice')}
           disabled={loading}
           style={{
-            padding: '10px 20px',
-            marginRight: '10px',
-            backgroundColor: '#6f42c1',
+            padding: '15px 30px',
+            backgroundColor: '#0070f3',
             color: 'white',
             border: 'none',
-            borderRadius: '5px',
+            borderRadius: '8px',
+            fontSize: '16px',
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >
-          {loading ? 'Testing...' : 'Test Vercel Invoice'}
-        </button>
-        
-        <button 
-          onClick={() => testInvoice('/api/invoice')}
-          disabled={loading}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#fd7e14',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Testing...' : 'Test Canvas Invoice'}
+          {loading ? 'Generating...' : 'Generate Vercel Invoice (Production)'}
         </button>
       </div>
       
@@ -131,20 +80,23 @@ export default function Home() {
       )}
       
       <div style={{ marginTop: '30px' }}>
-        <h3>Test Endpoints:</h3>
-        <ul>
-          <li><a href="/api/test-canvas" target="_blank">/api/test-canvas</a> - Basic canvas test</li>
-          <li><a href="/api/test-invoice" target="_blank">/api/test-invoice</a> - Canvas-based invoice (local)</li>
-          <li><a href="/api/test-invoice-vercel" target="_blank">/api/test-invoice-vercel</a> - Vercel OG invoice (edge runtime)</li>
-          <li><a href="/api/vercel-invoice" target="_blank">/api/vercel-invoice</a> - Simple Vercel OG invoice (production ready)</li>
-          <li><a href="/api/invoice" target="_blank">/api/invoice</a> - Canvas-based invoice</li>
+        <h3>Available Endpoints:</h3>
+        <ul style={{ fontSize: '16px', lineHeight: '1.6' }}>
+          <li><a href="/api/invoice" target="_blank" style={{ textDecoration: 'none', color: '#28a745' }}>/api/invoice</a> - Canvas-based invoice generation (works locally)</li>
+          <li><a href="/api/vercel-invoice" target="_blank" style={{ textDecoration: 'none', color: '#0070f3' }}>/api/vercel-invoice</a> - Vercel OG invoice generation (works in production)</li>
         </ul>
         
-        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e8f4f8', borderRadius: '5px' }}>
-          <h4>Deployment Solutions:</h4>
-          <p><strong>Canvas endpoints:</strong> Work locally but may have text rendering issues in Vercel serverless</p>
-          <p><strong>Vercel OG endpoints:</strong> Guaranteed to work in Vercel production with proper text rendering</p>
-          <p><strong>Recommended for production:</strong> Use <code>/api/vercel-invoice</code> for Vercel deployments</p>
+        <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+          <h4 style={{ marginTop: '0', color: '#495057' }}>📋 Usage Guide:</h4>
+          <div style={{ marginBottom: '15px' }}>
+            <strong style={{ color: '#28a745' }}>Local Development:</strong> Use <code>/api/invoice</code> - Canvas-based with improved font rendering
+          </div>
+          <div style={{ marginBottom: '15px' }}>
+            <strong style={{ color: '#0070f3' }}>Vercel Production:</strong> Use <code>/api/vercel-invoice</code> - Guaranteed text rendering with @vercel/og
+          </div>
+          <div style={{ fontSize: '14px', color: '#6c757d' }}>
+            💡 The Vercel endpoint will work perfectly in serverless environments where canvas text rendering may fail.
+          </div>
         </div>
       </div>
     </div>
