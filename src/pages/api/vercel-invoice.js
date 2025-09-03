@@ -1,130 +1,113 @@
-import { ImageResponse } from '@vercel/og';
+export default async function handler(req, res) {
+  // Allow GET and POST methods
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-export default async function handler() {
   try {
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: '800px',
-            height: '600px',
-            backgroundColor: 'white',
-            padding: '40px',
-            fontFamily: 'system-ui',
-            fontSize: '16px',
-            color: 'black',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <div style={{
-            textAlign: 'center',
-            fontSize: '24px',
-            fontWeight: 'bold',
-            marginBottom: '30px',
-            border: '2px solid black',
-            padding: '15px'
-          }}>
-            TAX INVOICE
-          </div>
-
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ fontSize: '18px', fontWeight: 'bold' }}>NIPM TEST COMPANY</div>
-            <div>123 Test Street</div>
-            <div>Test City, Test State</div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div>
-              <div>Invoice No: TEST/2024/001</div>
-              <div>Date: 01-01-2024</div>
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '20px', border: '1px solid black', padding: '15px' }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>Bill To:</div>
-            <div>Test Customer Name</div>
-            <div>Test Address Line 1</div>
-            <div>Delhi - 07</div>
-            <div>Mobile: 1234567890</div>
-            <div>Email: test@test.com</div>
-          </div>
-
-          <div style={{ border: '1px solid black', marginBottom: '20px' }}>
-            <div style={{
-              display: 'flex',
-              backgroundColor: '#f0f0f0',
-              borderBottom: '1px solid black',
-              padding: '10px'
-            }}>
-              <div style={{ width: '60px' }}>S.No</div>
-              <div style={{ flex: '1' }}>Particulars</div>
-              <div style={{ width: '100px', textAlign: 'right' }}>Amount</div>
-            </div>
-
-            <div style={{ display: 'flex', padding: '10px', borderBottom: '1px solid black' }}>
-              <div style={{ width: '60px' }}>1</div>
-              <div style={{ flex: '1' }}>Test Entrance Fee</div>
-              <div style={{ width: '100px', textAlign: 'right' }}>1000</div>
-            </div>
-
-            <div style={{ display: 'flex', padding: '10px', borderBottom: '1px solid black' }}>
-              <div style={{ width: '60px' }}>2</div>
-              <div style={{ flex: '1' }}>Test Membership Fee</div>
-              <div style={{ width: '100px', textAlign: 'right' }}>2000</div>
-            </div>
-
-            <div style={{ display: 'flex', padding: '10px', borderBottom: '1px solid black' }}>
-              <div style={{ width: '60px' }}></div>
-              <div style={{ flex: '1' }}>IGST</div>
-              <div style={{ width: '100px', textAlign: 'right' }}>540</div>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              padding: '10px',
-              backgroundColor: '#f0f0f0',
-              fontWeight: 'bold'
-            }}>
-              <div style={{ width: '60px' }}></div>
-              <div style={{ flex: '1' }}>TOTAL</div>
-              <div style={{ width: '100px', textAlign: 'right' }}>3540</div>
-            </div>
-          </div>
-
-          <div style={{ fontSize: '14px' }}>
-            <div style={{ marginBottom: '15px' }}>
-              <strong>Amount in words:</strong> INR THREE THOUSAND FIVE HUNDRED AND FORTY ONLY
-            </div>
-            
-            <div style={{ marginBottom: '10px' }}>
-              <strong>Declaration:</strong> We declare that this invoice shows the actual price of the services described.
-            </div>
-            
-            <div>
-              <strong>Bank Details:</strong> State Bank of India, Acc: 10513447918, IFSC: SBIN0001749
-            </div>
-          </div>
-        </div>
-      ),
-      {
-        width: 800,
-        height: 600,
-      }
-    );
-  } catch (error) {
-    console.error('Error generating invoice:', error);
+    console.log("Starting smart invoice generation");
+    console.log("Environment:", process.env.NODE_ENV || 'development');
+    console.log("Platform:", process.platform);
+    console.log("Vercel:", process.env.VERCEL ? 'true' : 'false');
     
-    return new Response(JSON.stringify({
-      success: false,
-      error: error.message
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
+    // Sample invoice data
+    const invoiceData = {
+      invoiceNumber: "TEST/2024/001",
+      date: "01-01-2024",
+      referenceNumber: "",
+      otherReference: "TEST MEMBER",
+      clientMobile: "1234567890",
+      clientEmail: "test@test.com",
+      clientAddress: {
+        line1: "Test Customer Name",
+        line2: "Test Address Line 1",
+        State: "Delhi",
+        Code: "07",
+      },
+      items: [
+        {
+          serialNumber: "1",
+          particulars: "Test Entrance Fee",
+          serviceCode: "-",
+          amount: 1000,
+        },
+        {
+          serialNumber: "2", 
+          particulars: "Test Membership Fee",
+          serviceCode: "-",
+          amount: 2000,
+        }
+      ],
+      igstRow: {
+        serialNumber: "",
+        particulars: "IGST",
+        serviceCode: "-",
+        amount: 540,
+      },
+      totalAmount: 3540,
+      amountInWords: "INR THREE THOUSAND FIVE HUNDRED AND FORTY ONLY",
+      igstDetails: [
+        {
+          HSNserial: "999599",
+          taxableValue: 3000,
+          igst: {
+            rate: "18%",
+            amount: 540,
+          },
+          totalTax: 540,
+        },
+      ],
+      totalTaxAmount: 540,
+      taxAmountInWords: "INR FIVE HUNDRED AND FORTY ONLY"
+    };
+
+    // For now, always use canvas since @vercel/og has deployment complexity
+    // In production Vercel, use the dedicated /api/vercel-invoice endpoint
+      console.log("Using canvas for invoice generation");
+      
+      // Use canvas for local development
+      const generateInvoice = (await import('../../utils/invoicehelper')).default;
+      
+      const invoiceBuffer = await generateInvoice(
+        invoiceData.invoiceNumber,
+        invoiceData.date,
+        invoiceData.referenceNumber,
+        invoiceData.otherReference,
+        invoiceData.clientMobile,
+        invoiceData.clientEmail,
+        invoiceData.clientAddress,
+        invoiceData.items,
+        invoiceData.igstRow,
+        invoiceData.totalAmount,
+        invoiceData.amountInWords,
+        invoiceData.igstDetails,
+        invoiceData.totalTaxAmount,
+        invoiceData.taxAmountInWords
+      );
+      
+      res.setHeader('Content-Type', 'image/jpeg');
+      res.setHeader('Content-Length', invoiceBuffer.length);
+      res.setHeader('Content-Disposition', 'inline; filename="invoice.jpeg"');
+      
+      return res.status(200).send(invoiceBuffer);
+
+  } catch (error) {
+    console.error("Smart invoice generation failed:", error);
+    
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+      environment: process.env.NODE_ENV || 'development',
+      platform: process.platform,
+      vercel: process.env.VERCEL ? 'true' : 'false'
     });
   }
 }
 
+// This endpoint works in both edge and node runtime
 export const config = {
-  runtime: 'edge',
+  api: {
+    responseLimit: '10mb',
+  },
 };
