@@ -89,6 +89,8 @@ GlobalFonts.registerFromPath(
   drawText("Grand Total:", 550, startY, "18px Arial-Bold", "center");
   drawText(`$${invoiceData.grandTotal}`, 700, startY, "18px Arial-Bold", "center");
 
+  console.log("outputting invoice buffer", canvas);
+
   return canvas.toBuffer("image/png");
 }
 
