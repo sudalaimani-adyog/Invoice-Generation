@@ -4,6 +4,10 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     serverComponentsExternalPackages: ['@napi-rs/canvas']
+  },
+  // Enable src directory
+  webpack: (config) => {
+    return config;
   }
 }
 

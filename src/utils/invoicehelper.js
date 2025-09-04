@@ -190,8 +190,7 @@ let logo;
   const formattedReference = otherReference; // Use the actual otherReference passed from certificateInvoiceGenerator
   drawMultilineText(`Invoice Number:\n${invoiceNumber}`, 405, 60, "14px Arial", "left");
   drawMultilineText(`Dated: \n${date}`, 600, 60, "14px Arial");
-  drawText(
-    `Reference No. & Date: \n${formattedReference}`,
+  drawMultilineText( `Reference No. & Date: \n${formattedReference}`,
     405,
     115,
     "14px Arial"
@@ -268,8 +267,8 @@ let logo;
   context.stroke(); // Draw the line
 
   // Total amount details - use the passed totalAmount instead of calculating
-  drawText("Total", 480, 618, "bold 14px Arial");
-  drawText(`₹ ${totalAmount?.toFixed(2)}`, 680, 618, "bold 14px Arial");
+  drawText("Total", 480, 610, "bold 14px Arial");
+  drawText(`₹ ${totalAmount?.toFixed(2)}`, 680, 610, "bold 14px Arial");
 
   // border line after total details
 
@@ -284,9 +283,9 @@ let logo;
   console.log('Amount in words:', amountInWords);
   console.log('Total amount:', totalAmount);
   
-  drawText("Amount Chargeable (in words)", 30, 650, "14px Arial");
-  drawText(`${amountInWords}`, 30, 670, "bold 14px Arial");
-  drawText("E. & O.E", 630, 650, "14px Arial");
+  drawText("Amount Chargeable (in words)", 30, 640, "14px Arial");
+  drawText(`${amountInWords}`, 30, 660, "bold 14px Arial");
+  drawText("E. & O.E", 630, 640, "14px Arial");
 
   // border line after Amount in words
 
@@ -299,12 +298,12 @@ let logo;
 
   // GST details header
 
-  drawText("HSN/SAC", 200, 700, "14px Arial");
-  drawText(`Taxable\nValue`, 490, 695, "14px Arial");
-  drawText("IGST", 600, 695, "14px Arial");
-  drawText("Rate", 570, 715, "13px Arial");
-  drawText("Amount", 620, 715, "13px Arial");
-  drawText(`Total Tax\nAmount`, 710, 695, "14px Arial");
+  drawText("HSN/SAC", 200, 685, "14px Arial");
+  drawMultilineText(`Taxable\nValue`, 490, 685, "14px Arial");
+  drawText("IGST", 600, 690, "14px Arial");
+  drawText("Rate", 570, 705, "13px Arial");
+  drawText("Amount", 620, 705, "13px Arial");
+  drawMultilineText(`Total Tax\nAmount`, 710, 685, "14px Arial");
 
   // border line after GST header
 
@@ -330,14 +329,14 @@ let logo;
   
   if (Array.isArray(igstDetails)) {
     igstDetails.forEach((item, index) => {
-      let startY = 735;
+      let startY = 725;
       const y = startY + index * 30;
 
-      drawText("999599", 200, y, "13px Arial");  // Aligned with HSN/SAC header at x=200
-      drawText(Number(item.taxableValue || 0)?.toFixed(2), 490, y, "13px Arial");
-      drawText(item.igst?.rate ?? "", 570, y, "13px Arial");
-      drawText(Number(item.igst?.amount || 0)?.toFixed(2), 620, y, "13px Arial");
-      drawText(Number(item.totalTax || 0)?.toFixed(2), 720, y, "13px Arial");
+      drawText("999599", 200, y, "bold 13px Arial");  // Aligned with HSN/SAC header at x=200
+      drawText(Number(item.taxableValue || 0)?.toFixed(2), 490, y, "bold 13px Arial");
+      drawText(item.igst?.rate ?? "", 570, y, "bold 13px Arial");
+      drawText(Number(item.igst?.amount || 0)?.toFixed(2), 620, y, "bold 13px Arial");
+      drawText(Number(item.totalTax || 0)?.toFixed(2), 720, y, "bold 13px Arial");
     });
   } else {
     console.log('ERROR: igstDetails is not an array:', typeof igstDetails, igstDetails);
@@ -350,7 +349,7 @@ let logo;
     const totalIgstAmount = igstDetails.reduce((sum, item) => sum + Number(item.igst?.amount || 0), 0);
     const totalTaxAmount = igstDetails.reduce((sum, item) => sum + Number(item.totalTax || 0), 0);
     
-    const y = 755;
+    const y = 745;
     drawText("Total", 440, y, "bold 13px Arial");
     drawText(totalTaxableValue?.toFixed(2), 490, y, "bold 13px Arial");
     drawText(totalIgstAmount?.toFixed(2), 620, y, "bold 13px Arial");
@@ -368,8 +367,8 @@ let logo;
 
   // Tax amount in words section
 
-  drawText("Tax Amount (in words):", 10, 780, "14px Arial");
-  drawText(`${taxAmountInWords}`, 160, 780, "bold 14px Arial");
+  drawText("Tax Amount (in words):", 10, 775, "14px Arial");
+  drawText(`${taxAmountInWords}`, 160, 775, "bold 14px Arial");
 
   // border line after amount in words section
 
@@ -393,7 +392,7 @@ let logo;
   drawMultilineText(
     `Declaration: We declare that this invoice shows the actual\nprice of the services described and that all particulars\nare true and correct.`,
     10,
-    830,
+    820,
     "14px Arial",
     "left",
     16
@@ -402,7 +401,7 @@ let logo;
   drawMultilineText(
     `Bank Details: State Bank of India, Account Number:\n10513447918, IFSC: SBIN0001749, Branch: Park Circus,\nKolkata`,
     10,
-    900,
+    890,
     "14px Arial",
     "left",
     16
@@ -413,21 +412,21 @@ let logo;
   drawText(
     "for National Institute of Personnel Management",
     405,
-    820,
+    815,
     "bold 13px Arial"
   );
 
   drawText("SOMEN ROY ", 405, 850, "bold 19px Trebuchet MS");
-  drawText("Digitally signed by SOMEN ROY", 520, 850, "13px Trebuchet MS");
-  drawText(
+  drawText("Digitally signed by SOMEN ROY", 520, 850, "bold 13px Trebuchet MS");
+  drawMultilineText(
     "DN: cn=SOMEN ROY, o=National Institute of Personnel\nManagement, ou=Kolkata,\nemail=manager.accounts@nipm.in, c=IN",
     405,
     870,
-    "13px Trebuchet MS"
+    "bold 13px Trebuchet MS"
   );
 
   // drawText("Date: 2024.05.21 10:37:32 +05'30'", 405, 930, "13px Trebuchet MS");
-  drawText("Authorised Signatory", 530, 970, "12px Arial");
+  drawText("Authorised Signatory", 530, 960, "12px Arial");
 
   // border line at end of Invoice
 
@@ -440,7 +439,7 @@ let logo;
 
   // Footer
 
-  drawText("This is a Computer Generated Invoice", 270, 990, "14px Arial");
+  drawText("This is a Computer Generated Invoice", 270, 985, "14px Arial");
 
   const buffer = canvas.toBuffer("image/png");
   console.log("Invoice generated successfully.");
