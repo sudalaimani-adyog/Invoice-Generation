@@ -73,60 +73,51 @@ export default async function handler(req, res) {
     // Use canvas for local development
 
 
-    const invoiceBuffer = await generateInvoice({
-      invoiceNumber: "INV-2025-001",
-      invoiceDate: "2025-09-03",
-      referenceNumber: "REF-12345",
-      otherReference: "PO-56789",
-      clientMobile: "9876543210",
-      clientEmail: "client@example.com",
-      clientAddress: {
-      line1: "John Doe",
-      line2: "123, Main Street, Business Park",
-      state: "Tamil Nadu",
-      code: "33",
-    },
-      items: [
+    const invoiceBuffer = await generateInvoice(
+      "NIPM/2025-26/855",
+      "24-07-2025",
+      "",
+      "C 855",
+      "9658741230",
+      "mr@gmail.com",
       {
-        serialNumber: 1,
-        particulars: "Website Development Services",
-        serviceCode: "998313",
-        quantity: 1,
-        rate: 50000,
-        amount: 50000,
+        line1: 'mani ratnam',
+        line2: '272,Thalayari Street',
+        State: '24',
+        Code: '23232'
       },
-      {
-        serialNumber: 2,
-        particulars: "Mobile App Development",
-        serviceCode: "998314",
-        quantity: 1,
-        rate: 30000,
-        amount: 30000,
-      },
-    ],
-      igstRow: {
-      serialNumber: "",
-      particulars: "IGST",
-      serviceCode: "-",
-      amount: 14400,
-    },
-      totalAmount: 94400,
-      amountInWords: "INR NINETY FOUR THOUSAND FOUR HUNDRED ONLY",
-      gst: {
-      igstDetails: [
+      [
         {
-          HSNserial: "999599",
-          taxableValue: 80000,
-          igst: {
-            rate: "18%",
-            amount: 14400,
-          },
-          totalTax: 14400,
+          serialNumber: '1',
+          particulars: 'Entrance Fees (IGST@18%)',
+          serviceCode: '-',
+          amount: 500
         },
+        {
+          serialNumber: '2',
+          particulars: 'Membership Fees (IGST@18%)',
+          serviceCode: '-',
+          amount: 2000
+        }
       ],
-    },
-      totalTaxAmount: 14400,
-      taxAmountInWords: "INR FOURTEEN THOUSAND FOUR HUNDRED ONLY"}
+      {
+        serialNumber: '',
+        particulars: 'IGST',
+        serviceCode: '-',
+        amount: 450
+      }, 
+      2950, 
+      "INR TWO THOUSAND, NINE HUNDRED FIFTY ONLY",
+      [
+        {
+          HSNserial: '999599',
+          taxableValue: 2950,
+          igst: { rate: '18%', amount: 450 },
+          totalTax: 450
+        }
+      ],
+      "450",
+      "INR FOUR HUNDRED FIFTY ONLY"
     );
     console.log("lsndkjashdkjashdkjhasdkjhasdjkhasjkdhjkasdhjkashdkjads");
 
