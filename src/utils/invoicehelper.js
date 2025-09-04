@@ -11,7 +11,7 @@ GlobalFonts.registerFromPath(
   "Arial-Bold"
 );
 GlobalFonts.registerFromPath(
-  path.join(process.cwd(), "public/fonts/ARIAL.TTF"),
+  path.join(process.cwd(), "public/fonts/trebuc.ttf"),
   "Trebuchet MS"
 );
 
@@ -32,7 +32,6 @@ const generateInvoice = async (
   taxAmountInWords
 ) => {
 
-  console.log("totalAmoun A:Lsj;klSLKSJt", totalAmount);
   const width = 800;
   const height = 1000;
   const canvas = createCanvas(width, height);
@@ -79,7 +78,7 @@ let logo;
     const fallbackFont = font.replace(/Arial/g, 'Arial, Helvetica, "DejaVu Sans", "Liberation Sans", FreeSans, sans-serif');
     
     try {
-      context.font = fallbackFont;
+      context.font = font;
       context.textAlign = align;
       context.fillStyle = "#000000"; // Ensure text color is black
       context.textBaseline = "top"; // Consistent baseline
@@ -417,12 +416,12 @@ let logo;
   );
 
   drawText("SOMEN ROY ", 405, 850, "bold 19px Trebuchet MS");
-  drawText("Digitally signed by SOMEN ROY", 520, 850, "bold 13px Trebuchet MS");
+  drawText("Digitally signed by SOMEN ROY", 520, 855, "13px Trebuchet MS");
   drawMultilineText(
     "DN: cn=SOMEN ROY, o=National Institute of Personnel\nManagement, ou=Kolkata,\nemail=manager.accounts@nipm.in, c=IN",
     405,
-    870,
-    "bold 13px Trebuchet MS"
+    875,
+    "13px Trebuchet MS"
   );
 
   // drawText("Date: 2024.05.21 10:37:32 +05'30'", 405, 930, "13px Trebuchet MS");
